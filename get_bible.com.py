@@ -2,6 +2,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 import sys
 import re
+import os
 
 
 class AppURLopener(urllib.request.FancyURLopener):
@@ -83,6 +84,7 @@ if len(sys.argv) < 2:
     sys.exit("Enter book ID from www.bible.com")
 
 bible_book = sys.argv[1]
+bible_book_name = bible_book
 antology = 'all'
 
 if len(sys.argv) > 2:
@@ -131,6 +133,12 @@ for bookcode, bk_info in urls.items():
                 active = ul.find('li', class_="active")
                 book_name = active.text.strip()
 
+                versions = parser.find('div', class_="version-list")
+                if versions:
+                    version = versions.find('li', class_="active")
+                    if version:
+                        bible_book_name = version.text.strip()
+
                 # write headers to the usfm file
                 usfm.append("\\id " + bk_info["code"].upper() + " Unlocked Literal Bible \n")
                 usfm.append("\\ide UTF-8 \n")
@@ -177,7 +185,12 @@ for bookcode, bk_info in urls.items():
                     if text.strip() != "":
                         usfm.append(text + "\n")
 
+    folder = os.path.join("bible.com", bible_book_name)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
     # save usfm to file
-    with(open(str(bk_num).zfill(2) + "-" + bookcode.upper() + ".usfm", "w", encoding="utf8", newline='\n')) as file:
+    path = os.path.join(folder, str(bk_num).zfill(2) + "-" + bookcode.upper() + ".usfm")
+    with(open(path, "w", encoding="utf8", newline='\n')) as file:
         for line in usfm:
             file.write(line)

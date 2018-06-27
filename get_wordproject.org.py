@@ -1,6 +1,7 @@
 import urllib.request
 from bs4 import BeautifulSoup
 import sys
+import os
 
 
 class AppURLopener(urllib.request.FancyURLopener):
@@ -151,7 +152,7 @@ for bk_num, bk_info in urls.items():
         chapter = str(chap)
 
         print("Chapter: " + chapter)
-        
+
         with opener.open('https://www.wordproject.org/bibles/' + bible_book + '/' + str(book_number).zfill(
                 2) + '/' + chapter + '.htm') as response:
             html_byte = response.read()
@@ -185,6 +186,11 @@ for bk_num, bk_info in urls.items():
                     verse = None
                     text = None
 
-    with(open(str(wa_book_num).zfill(2) + "-" + bk_info["code"].upper() + ".usfm", "w", encoding="utf8", newline='\n')) as file:
+    folder = os.path.join("wordproject.org", bible_book)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    path = os.path.join(folder, str(wa_book_num).zfill(2) + "-" + bk_info["code"].upper() + ".usfm")
+    with(open(path, "w", encoding="utf8", newline='\n')) as file:
         for line in usfm:
             file.write(line)
