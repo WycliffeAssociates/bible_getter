@@ -31,7 +31,7 @@ If you want to get just Old Testament or New Testament type following commands:
 `python get_wordproject.org.py kj nt`
 
 #### Bible.com
-1. Open [www.bible.com/bible](https://www.bible.com/bible "bible.com") in your browser, find the desired bible version and open it. Find the bible ID in URL of address bar (i.e. www.bible.com/bible/***59***/GEN.1.esv. In this case ***59*** is the ID you need. Keep it in mind.)
+1. Open [www.bible.com/bible](https://www.bible.com/bible "bible.com") in your browser, find the desired bible version and open it. Find the bible ID in URL of address bar (i.e. "www.bible.com/bible/***59***/GEN.1.esv". In this case ***59*** is the ID you need. Keep it in mind.)
 2. Open command prompt in the folder with script files.
 3. To get the entire bible enter the following command:
 
