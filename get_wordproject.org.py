@@ -94,12 +94,21 @@ urls = dict()
 for i, bookcode in enumerate(allbooks):
     booknum = i + 1
 
+    if antology == "ot" and booknum > 39:
+        continue
+    elif antology == "nt" and booknum < 40:
+        continue
+
     with opener.open('https://www.wordproject.org/bibles/' + bible_book + '/' + str(booknum).zfill(2) + '/1.htm') as response:
         html_byte = response.read()
         html = html_byte.decode('utf-8')
         parser = BeautifulSoup(html, 'html5lib')
 
         book_body = parser.find('div', class_='textHeader')
+
+        if not book_body or not book_body.h2:
+            continue
+
         book = book_body.h2.text
 
         urls[str(booknum)] = dict()
@@ -111,7 +120,7 @@ for i, bookcode in enumerate(allbooks):
         chapters = parser.find_all('a', class_='chap')
 
         for chapter in chapters:
-            urls[str(booknum)]["chapters"].append(chapter.text)
+            urls[str(booknum)]["chapters"].append(chapter.text.strip())
 
 for bk_num, bk_info in urls.items():
     book_number = str(bk_num)
@@ -142,7 +151,7 @@ for bk_num, bk_info in urls.items():
         chapter = str(chap)
 
         print("Chapter: " + chapter)
-
+        
         with opener.open('https://www.wordproject.org/bibles/' + bible_book + '/' + str(book_number).zfill(
                 2) + '/' + chapter + '.htm') as response:
             html_byte = response.read()
