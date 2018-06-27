@@ -78,10 +78,14 @@ allbooks = [
     "rev"
 ]
 
-if len(sys.argv) != 2:
+if len(sys.argv) < 2:
     sys.exit("Enter book code from www.wordproject.org/bibles/")
 
 bible_book = sys.argv[1]
+antology = 'all'
+
+if len(sys.argv) > 2:
+    antology = sys.argv[2]
 
 print("Collecting the list of all the chapters. Please wait...")
 
@@ -111,9 +115,15 @@ for i, bookcode in enumerate(allbooks):
 
 for bk_num, bk_info in urls.items():
     book_number = str(bk_num)
+
     wa_book_num = int(bk_num)
     if wa_book_num > 39:
         wa_book_num += 1
+
+    if antology == "ot" and wa_book_num > 39:
+        continue
+    elif antology == "nt" and wa_book_num < 41:
+        continue
 
     usfm = list()
 
