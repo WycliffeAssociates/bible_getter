@@ -172,7 +172,7 @@ for bookcode, bk_info in urls.items():
                     if not text:
                         text = ""
                     if content.text.strip() != "":
-                        text += content.text.strip() + " "
+                        text += content.text.strip().replace('\r', '').replace('\n', '') + " "
 
                 if verse and not re.match(r'^[0-9-]+$', verse.text.strip()):
                     verse = None

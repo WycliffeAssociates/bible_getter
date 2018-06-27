@@ -2,6 +2,7 @@ import urllib.request
 from bs4 import BeautifulSoup, NavigableString
 import sys
 import os
+import re
 
 
 class AppURLopener(urllib.request.FancyURLopener):
@@ -168,34 +169,22 @@ for bk_num, bk_info in urls.items():
             chapter_body = parser.find(id="textBody")
             p = chapter_body.p
 
-            for a in p.findAll('a'):
-                a.unwrap()
-            for div in p.findAll('div'):
-                div.unwrap()
-
-            for child in p.children:
-                if child.name == "br":
+            verses = re.split(r'([0-9]+)(\D+)', p.text)
+            for elm in verses:
+                if elm.strip() == "":
                     continue
 
-                if child.name == "span" and 'verse' in child['class']:
-                    next_verse = child.string.strip()
-
+                if re.match(r'^[0-9]+$', elm.strip()):
+                    next_verse = elm.strip()
                     if verse and verse != next_verse and text:
                         usfm.append("\\v " + verse + " " + text + "\n")
                         text = None
                     verse = next_verse
                 else:
-                    if verse:
-                        if not text:
-                            if type(child) is NavigableString:
-                                text = child.string.strip() + " "
-                            else:
-                                text = child.text.strip() + " "
-                        else:
-                            if type(child) is NavigableString:
-                                text += child.string.strip() + " "
-                            else:
-                                text += child.text.strip() + " "
+                    if not text:
+                        text = elm.strip().replace('\r', '').replace('\n', '') + " "
+                    else:
+                        text += elm.strip().replace('\r', '').replace('\n', '') + " "
 
             if verse and text:
                 usfm.append("\\v " + verse + " " + text + "\n")
