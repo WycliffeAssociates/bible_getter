@@ -1,5 +1,5 @@
 import urllib.request
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 import sys
 import os
 
@@ -101,9 +101,7 @@ for i, bookcode in enumerate(allbooks):
         continue
 
     with opener.open('https://www.wordproject.org/bibles/' + bible_book + '/' + str(booknum).zfill(2) + '/1.htm') as response:
-        html_byte = response.read()
-        html = html_byte.decode('utf-8')
-        parser = BeautifulSoup(html, 'html5lib')
+        parser = BeautifulSoup(response, 'html5lib')
 
         book_body = parser.find('div', class_='textHeader')
 
@@ -114,7 +112,7 @@ for i, bookcode in enumerate(allbooks):
 
         urls[str(booknum)] = dict()
         urls[str(booknum)]["code"] = bookcode
-        urls[str(booknum)]["name"] = book
+        urls[str(booknum)]["name"] = book.strip()
         urls[str(booknum)]["chapters"] = []
         urls[str(booknum)]["chapters"].append(1)
 
@@ -155,9 +153,7 @@ for bk_num, bk_info in urls.items():
 
         with opener.open('https://www.wordproject.org/bibles/' + bible_book + '/' + str(book_number).zfill(
                 2) + '/' + chapter + '.htm') as response:
-            html_byte = response.read()
-            html = html_byte.decode('utf-8')
-            parser = BeautifulSoup(html, 'html5lib')
+            parser = BeautifulSoup(response, 'html5lib')
 
             book_body = parser.find('div', class_='textHeader')
             book = book_body.h2.text
@@ -172,19 +168,37 @@ for bk_num, bk_info in urls.items():
             chapter_body = parser.find(id="textBody")
             p = chapter_body.p
 
+            for a in p.findAll('a'):
+                a.unwrap()
+            for div in p.findAll('div'):
+                div.unwrap()
+
             for child in p.children:
                 if child.name == "br":
                     continue
 
-                if child.name == "span":
-                    verse = child.string.strip()
-                else:
-                    text = child.string.strip()
+                if child.name == "span" and 'verse' in child['class']:
+                    next_verse = child.string.strip()
 
-                if verse and text:
-                    usfm.append("\\v " + verse + " " + text + "\n")
-                    verse = None
-                    text = None
+                    if verse and verse != next_verse and text:
+                        usfm.append("\\v " + verse + " " + text + "\n")
+                        text = None
+                    verse = next_verse
+                else:
+                    if verse:
+                        if not text:
+                            if type(child) is NavigableString:
+                                text = child.string.strip() + " "
+                            else:
+                                text = child.text.strip() + " "
+                        else:
+                            if type(child) is NavigableString:
+                                text += child.string.strip() + " "
+                            else:
+                                text += child.text.strip() + " "
+
+            if verse and text:
+                usfm.append("\\v " + verse + " " + text + "\n")
 
     folder = os.path.join("wordproject.org", bible_book)
     if not os.path.exists(folder):

@@ -123,9 +123,7 @@ for bookcode, bk_info in urls.items():
         print("Chapter: " + chapter)
 
         with opener.open('https://www.bible.com/en-GB/bible/' + bible_book + '/' + bookcode.upper() + '.' + chapter) as response:
-            html_byte = response.read()
-            html = html_byte.decode('utf-8')
-            parser = BeautifulSoup(html, 'html.parser')
+            parser = BeautifulSoup(response, 'html.parser')
 
             # Insert book title
             if not title_done:
