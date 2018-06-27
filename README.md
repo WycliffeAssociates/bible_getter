@@ -13,7 +13,8 @@ These scripts help to get bible in usfm format from wordproject.org and bible.co
 
 # How to use
 
-Download and extract script files
+#### Download and extract script files
+Here is the link: [Download](https://github.com/WycliffeAssociates/bible_getter/archive/master.zip "Bible Getter")
 
 #### Wordproject.org
 1. Open [www.wordproject.org/bibles/](https://www.wordproject.org/bibles/ "wordproject.org") in your browser, find the desired bible version in the list and open it. Find the bible code in URL of address bar (i.e. "www.wordproject.org/bibles/***kj***/". In this case ***kj*** is the code you need. Keep it in mind.)
