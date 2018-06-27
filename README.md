@@ -45,6 +45,7 @@ If you want to get just Old Testament or New Testament type following commands:
 
 `python get_bible.com.py 59 nt`
 
+
 **To Open/Edit usfm files Notepad++ is recommended**.
 
 You can download it from here: [notepad-plus-plus.org/download](https://notepad-plus-plus.org/download "notepad-plus-plus.org/download")
