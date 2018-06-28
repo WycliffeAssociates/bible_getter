@@ -18,7 +18,7 @@ Here is the link: [Download](https://github.com/WycliffeAssociates/bible_getter/
 
 #### Wordproject.org
 1. Open [www.wordproject.org/bibles/](https://www.wordproject.org/bibles/ "wordproject.org") in your browser, find the desired bible version in the list and open it. Find the bible code in URL of address bar (i.e. "www.wordproject.org/bibles/***kj***/". In this case ***kj*** is the code you need. Keep it in mind.)
-2. Open command prompt in the folder with script files. Simply hold down the Shift key and right-click a folder. The context menu will contain an entry, ‘Open command window here.”
+2. Open command prompt in the folder with script files. Simply hold down the Shift key and right-click a folder. The context menu will contain an entry, ‘Open command window here.‘ or ‘Open PowerShell here‘ for Windows 10
 3. To get the entire bible enter the following command:
 
 `python get_wordproject.org.py kj`
