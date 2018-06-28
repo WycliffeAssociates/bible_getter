@@ -6,7 +6,7 @@ import re
 
 
 class AppURLopener(urllib.request.FancyURLopener):
-    version = "Mozilla/5.0"
+    version = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"
 
 
 opener = AppURLopener()
@@ -102,7 +102,7 @@ for i, bookcode in enumerate(allbooks):
         continue
 
     with opener.open('https://www.wordproject.org/bibles/' + bible_book + '/' + str(booknum).zfill(2) + '/1.htm') as response:
-        parser = BeautifulSoup(response, 'html5lib')
+        parser = BeautifulSoup(response, 'lxml')
 
         book_body = parser.find('div', class_='textHeader')
 
@@ -154,7 +154,7 @@ for bk_num, bk_info in urls.items():
 
         with opener.open('https://www.wordproject.org/bibles/' + bible_book + '/' + str(book_number).zfill(
                 2) + '/' + chapter + '.htm') as response:
-            parser = BeautifulSoup(response, 'html5lib')
+            parser = BeautifulSoup(response, 'lxml')
 
             book_body = parser.find('div', class_='textHeader')
             book = book_body.h2.text
@@ -175,7 +175,18 @@ for bk_num, bk_info in urls.items():
                     continue
 
                 if re.match(r'^[0-9]+$', elm.strip()):
-                    next_verse = elm.strip()
+                    if verse:
+                        if (int(elm.strip()) - int(verse)) == 1:
+                            next_verse = elm.strip()
+                        else:
+                            next_verse = verse
+                            if not text:
+                                text = elm.strip().replace('\r', '').replace('\n', '') + " "
+                            else:
+                                text += elm.strip().replace('\r', '').replace('\n', '') + " "
+                    else:
+                        next_verse = elm.strip()
+
                     if verse and verse != next_verse and text:
                         usfm.append("\\v " + verse + " " + text + "\n")
                         text = None

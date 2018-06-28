@@ -6,7 +6,7 @@ import os
 
 
 class AppURLopener(urllib.request.FancyURLopener):
-    version = "Mozilla/5.0"
+    version = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"
 
 
 opener = AppURLopener()
@@ -123,7 +123,7 @@ for bookcode, bk_info in urls.items():
         print("Chapter: " + chapter)
 
         with opener.open('https://www.bible.com/en-GB/bible/' + bible_book + '/' + bookcode.upper() + '.' + chapter) as response:
-            parser = BeautifulSoup(response, 'html.parser')
+            parser = BeautifulSoup(response, 'lxml')
 
             # Insert book title
             if not title_done:
