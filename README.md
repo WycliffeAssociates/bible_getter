@@ -7,9 +7,9 @@ These scripts help to get bible in usfm format from wordproject.org and bible.co
 
 `pip install beautifulsoup4`
 
-3. Install Html5Lib by entering the following command:
+3. Install LXML parsing library by entering the following command:
 
-`pip install html5lib`
+`pip install lxml`
 
 # How to use
 
