@@ -1,5 +1,5 @@
 import urllib.request
-from bs4 import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup
 import sys
 import os
 import re
